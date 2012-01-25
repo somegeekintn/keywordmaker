@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'KeywordMaker' target in the 'KeywordMaker' project
+//
+
+#ifdef __OBJC__
+	#import <Cocoa/Cocoa.h>
+#endif
