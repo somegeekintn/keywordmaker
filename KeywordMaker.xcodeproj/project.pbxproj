@@ -14,6 +14,9 @@
 		C9D3C7CD14CF9477001CEED0 /* QSDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D3C7CC14CF9477001CEED0 /* QSDocument.m */; };
 		C9D3C7D014CF9477001CEED0 /* QSDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9D3C7CE14CF9477001CEED0 /* QSDocument.xib */; };
 		C9D3C7D314CF9477001CEED0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9D3C7D114CF9477001CEED0 /* MainMenu.xib */; };
+		C9D3C7DB14CF97A8001CEED0 /* QSApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D3C7DA14CF97A8001CEED0 /* QSApplicationDelegate.m */; };
+		C9D3C7DE14CF9986001CEED0 /* CSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D3C7DD14CF9986001CEED0 /* CSVParser.m */; };
+		C9D3C7E514CFA937001CEED0 /* NSString+QS.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D3C7E414CFA937001CEED0 /* NSString+QS.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,15 +25,21 @@
 		C9D3C7BC14CF9477001CEED0 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		C9D3C7BD14CF9477001CEED0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		C9D3C7BE14CF9477001CEED0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		C9D3C7C114CF9477001CEED0 /* KeywordMaker-Info.plist */ = {isa = PBXFileReference; path = "KeywordMaker-Info.plist"; sourceTree = "<group>"; };
+		C9D3C7C114CF9477001CEED0 /* KeywordMaker-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KeywordMaker-Info.plist"; sourceTree = "<group>"; };
 		C9D3C7C314CF9477001CEED0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C9D3C7C514CF9477001CEED0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		C9D3C7C714CF9477001CEED0 /* KeywordMaker-Prefix.pch */ = {isa = PBXFileReference; path = "KeywordMaker-Prefix.pch"; sourceTree = "<group>"; };
+		C9D3C7C714CF9477001CEED0 /* KeywordMaker-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KeywordMaker-Prefix.pch"; sourceTree = "<group>"; };
 		C9D3C7C914CF9477001CEED0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		C9D3C7CB14CF9477001CEED0 /* QSDocument.h */ = {isa = PBXFileReference; path = QSDocument.h; sourceTree = "<group>"; };
+		C9D3C7CB14CF9477001CEED0 /* QSDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSDocument.h; sourceTree = "<group>"; };
 		C9D3C7CC14CF9477001CEED0 /* QSDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSDocument.m; sourceTree = "<group>"; };
 		C9D3C7CF14CF9477001CEED0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/QSDocument.xib; sourceTree = "<group>"; };
 		C9D3C7D214CF9477001CEED0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		C9D3C7D914CF97A8001CEED0 /* QSApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSApplicationDelegate.h; sourceTree = "<group>"; };
+		C9D3C7DA14CF97A8001CEED0 /* QSApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSApplicationDelegate.m; sourceTree = "<group>"; };
+		C9D3C7DC14CF9986001CEED0 /* CSVParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVParser.h; sourceTree = "<group>"; };
+		C9D3C7DD14CF9986001CEED0 /* CSVParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVParser.m; sourceTree = "<group>"; };
+		C9D3C7E314CFA937001CEED0 /* NSString+QS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+QS.h"; sourceTree = "<group>"; };
+		C9D3C7E414CFA937001CEED0 /* NSString+QS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+QS.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,8 +93,14 @@
 		C9D3C7BF14CF9477001CEED0 /* KeywordMaker */ = {
 			isa = PBXGroup;
 			children = (
+				C9D3C7DC14CF9986001CEED0 /* CSVParser.h */,
+				C9D3C7DD14CF9986001CEED0 /* CSVParser.m */,
+				C9D3C7D914CF97A8001CEED0 /* QSApplicationDelegate.h */,
+				C9D3C7DA14CF97A8001CEED0 /* QSApplicationDelegate.m */,
 				C9D3C7CB14CF9477001CEED0 /* QSDocument.h */,
 				C9D3C7CC14CF9477001CEED0 /* QSDocument.m */,
+				C9D3C7E314CFA937001CEED0 /* NSString+QS.h */,
+				C9D3C7E414CFA937001CEED0 /* NSString+QS.m */,
 				C9D3C7CE14CF9477001CEED0 /* QSDocument.xib */,
 				C9D3C7D114CF9477001CEED0 /* MainMenu.xib */,
 				C9D3C7C014CF9477001CEED0 /* Supporting Files */,
@@ -132,7 +147,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
-				ORGANIZATIONNAME = "Griffin Technology, Inc.";
+				ORGANIZATIONNAME = "Casey Fleser";
 			};
 			buildConfigurationList = C9D3C7AF14CF9476001CEED0 /* Build configuration list for PBXProject "KeywordMaker" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -172,6 +187,9 @@
 			files = (
 				C9D3C7C614CF9477001CEED0 /* main.m in Sources */,
 				C9D3C7CD14CF9477001CEED0 /* QSDocument.m in Sources */,
+				C9D3C7DB14CF97A8001CEED0 /* QSApplicationDelegate.m in Sources */,
+				C9D3C7DE14CF9986001CEED0 /* CSVParser.m in Sources */,
+				C9D3C7E514CFA937001CEED0 /* NSString+QS.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

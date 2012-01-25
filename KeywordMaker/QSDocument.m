@@ -3,62 +3,142 @@
 //  KeywordMaker
 //
 //  Created by Casey Fleser on 1/24/12.
-//  Copyright (c) 2012 Griffin Technology, Inc. All rights reserved.
+//  Copyright (c) 2012 Casey Fleser. All rights reserved.
 //
 
 #import "QSDocument.h"
+#import "CSVParser.h"
+#import "NSString+QS.h"
 
 @implementation QSDocument
 
-- (id)init
+@synthesize queryKey = _queryKey;
+@synthesize countKey = _countKey;
+
+- (void) dealloc
 {
-    self = [super init];
-    if (self) {
-		// Add your subclass-specific initialization here.
-		// If an error occurs here, return nil.
-    }
-    return self;
+	self.queryKey = nil;
+	self.countKey = nil;
+	[_wordCount release];
+	[_wordList release];
+	
+	[self dealloc];
 }
 
-- (NSString *)windowNibName
+- (NSString *) windowNibName
 {
-	// Override returning the nib file name of the document
-	// If you need to use a subclass of NSWindowController or if your document supports multiple NSWindowControllers, you should remove this method and override -makeWindowControllers instead.
 	return @"QSDocument";
 }
 
-- (void)windowControllerDidLoadNib:(NSWindowController *)aController
+- (void) windowControllerDidLoadNib: (NSWindowController *) inController
 {
-	[super windowControllerDidLoadNib:aController];
-	// Add any code here that needs to be executed once the windowController has loaded the document's window.
+	[super windowControllerDidLoadNib: inController];
 }
 
-- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
-{
-	/*
-	 Insert code here to write your document to data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning nil.
-	You can also choose to override -fileWrapperOfType:error:, -writeToURL:ofType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
-	*/
-	NSException *exception = [NSException exceptionWithName:@"UnimplementedMethod" reason:[NSString stringWithFormat:@"%@ is unimplemented", NSStringFromSelector(_cmd)] userInfo:nil];
-	@throw exception;
-	return nil;
-}
 
-- (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
+- (BOOL) readFromURL: (NSURL *) inAbsoluteURL
+	ofType: (NSString *) inTypeName
+	error: (NSError **) outError
 {
-	/*
-	Insert code here to read your document from the given data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning NO.
-	You can also choose to override -readFromFileWrapper:ofType:error: or -readFromURL:ofType:error: instead.
-	If you override either of these, you should also override -isEntireFileLoaded to return NO if the contents are lazily loaded.
-	*/
-	NSException *exception = [NSException exceptionWithName:@"UnimplementedMethod" reason:[NSString stringWithFormat:@"%@ is unimplemented", NSStringFromSelector(_cmd)] userInfo:nil];
-	@throw exception;
+	NSString		*rawData = [NSString stringWithContentsOfURL: inAbsoluteURL encoding: NSUTF8StringEncoding error: nil];
+	NSMutableString	*trimmedData = [NSMutableString string];
+	NSNumber		*count;
+	CSVParser		*parser;
+	
+	[_wordCount release];
+	_wordCount = [[NSMutableDictionary alloc] init];
+	
+	// ditch the comments, blank linkes at the beginning
+	[rawData enumerateLinesUsingBlock: ^(NSString *inLine, BOOL *outStop) {
+		if ([inLine length]) {
+			NSRange		commentRange;
+
+			commentRange = [inLine rangeOfString: @"#" options: NSAnchoredSearch];
+			if (commentRange.location == NSNotFound)
+				[trimmedData appendFormat: @"%@\r\n", inLine];
+		}
+	}];
+	parser = [[[CSVParser alloc] initWithString: trimmedData separator: @"," hasHeader: YES fieldNames: nil] autorelease];
+	[parser parseRowsForReceiver: self selector: @selector(receiveRecord:)];
+	
+	_wordList = [[NSMutableArray alloc] initWithCapacity: [[_wordCount allKeys] count]];
+	for (NSString *word in [_wordCount allKeys]) {
+		count = [_wordCount objectForKey: word];
+		[_wordList addObject: [NSDictionary dictionaryWithObjectsAndKeys: word, @"word", count, @"count", nil]];
+	}
+	[_wordList sortUsingComparator:^(id inObj1, id inObj2) {
+		NSDictionary	*info1 = inObj1;
+		NSDictionary	*info2 = inObj2;
+		
+		return [[info2 objectForKey: @"count"] compare: [info1 objectForKey: @"count"]];
+	}];
+	
 	return YES;
 }
 
-+ (BOOL)autosavesInPlace
++ (BOOL) autosavesInPlace
 {
-    return YES;
+    return NO;
+}
+
+- (NSString *) autosavingFileType
+{
+	return nil;
+}
+
+- (void) receiveRecord: (NSDictionary *) inRecord
+{
+	NSString	*query;		// one of "Matched Search Query" or "Query"
+	NSString	*visits;	// one of "Impressions" or "Visits"
+	NSNumber	*countVal;
+	NSInteger	count;
+	
+	if (self.queryKey == nil || self.countKey == nil) {		// figure out which report we're looking at
+		if ([[inRecord allKeys] containsObject: @"Matched Search Query"])
+			self.queryKey = @"Matched Search Query";
+		else if ([[inRecord allKeys] containsObject: @"Query"])
+			self.queryKey = @"Query";
+			
+		if ([[inRecord allKeys] containsObject: @"Visits"])
+			self.countKey = @"Visits";
+		else if ([[inRecord allKeys] containsObject: @"Impressions"])
+			self.countKey = @"Impressions";
+
+		NSAssert(self.queryKey != nil, @"Couldn't determine query key. Must be one of \"Matched Search Query\" or \"Query\"");
+		NSAssert(self.countKey != nil, @"Couldn't determine count key. Must be one of \"Visits\" or \"Impressions\"");
+	}
+	
+	query = [inRecord objectForKey: self.queryKey];
+	visits = [inRecord objectForKey: self.countKey];
+	if ([visits isEqualToString: @"< 10"])	// assume 1
+		visits = @"1";
+	
+	visits = [visits stringByRemovingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString: @","]];	// strip commas 
+	if (![query isEqualToString: @"(not set)"]) {
+		for (NSString *word in [query componentsSeparatedByCharactersInSet: [NSCharacterSet whitespaceCharacterSet]]) {
+			if ([word length]) {
+				count = [visits integerValue];
+				if ((countVal = [_wordCount objectForKey: word]) != nil)
+					count += [countVal integerValue];
+				
+				[_wordCount setObject: [NSNumber numberWithInteger: count] forKey: word];
+			}
+		}
+	}
+}
+
+#pragma - NSTableViewDataSource
+
+- (NSInteger) numberOfRowsInTableView: (NSTableView *) inTableView
+{
+	return [_wordList count];
+}
+
+- (id) tableView: (NSTableView *) inTableView
+	objectValueForTableColumn: (NSTableColumn *) inTableColumn
+	row: (NSInteger) inRow
+{
+	return [[_wordList objectAtIndex: inRow] objectForKey: inTableColumn.identifier];
 }
 
 @end
